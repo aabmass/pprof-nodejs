@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TEST kokoro build
+
 # Trap all errors.
 trap "echo '** AT LEAST ONE OF TESTS FAILED **'" ERR
 
