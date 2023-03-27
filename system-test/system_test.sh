@@ -10,6 +10,10 @@ set -eox pipefail
 
 cd $(dirname $0)
 
+echo "------------- DEBUGGGGG system_test.sh"
+cat /etc/gai.conf
+node -e 'const dns = require("dns"); dns.lookup("registry.npmjs.org", (err, address, family) => {console.log(err, address, family);});'
+
 # The list of tested versions below should be in sync with node's
 # official releases. https://nodejs.org/en/about/releases/
 if [[ -z "$BINARY_HOST" ]]; then
