@@ -6,6 +6,8 @@ trap "echo '** AT LEAST ONE OF TESTS FAILED **'" ERR
 # Fail on any error, show commands run.
 set -eox pipefail
 
+DOCKERFLAGS="-v /etc/gai.conf:/etc/gai.conf:ro"
+
 . $(dirname $0)/../tools/retry.sh
 
 cd $(dirname $0)
@@ -27,10 +29,10 @@ for i in ${NODE_VERSIONS[@]}; do
       --build-arg ADDITIONAL_PACKAGES="$ADDITIONAL_PACKAGES" \
       -t node$i-linux .
 
-  docker run  -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-linux \
+  docker run $DOCKERFLAGS -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-linux \
       /src/system-test/test.sh
 
-  docker run  -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" \
+  docker run $DOCKERFLAGS -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" \
       -e VERIFY_TIME_LINE_NUMBERS="true" node$i-linux \
       /src/system-test/test.sh
 
@@ -39,7 +41,7 @@ for i in ${NODE_VERSIONS[@]}; do
       --build-arg ADDITIONAL_PACKAGES="$ADDITIONAL_PACKAGES" \
       --build-arg NODE_VERSION=$i -t node$i-alpine .
 
-  docker run -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-alpine \
+  docker run $DOCKERFLAGS -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-alpine \
       /src/system-test/test.sh
 done
 
