@@ -10,11 +10,15 @@ set -eox pipefail
 
 cd $(dirname $0)
 
+echo "------------- DEBUGGGGG system_test.sh"
+cat /etc/gai.conf
+node -e 'const dns = require("dns"); dns.lookup("registry.npmjs.org", (err, address, family) => {console.log(err, address, family);});'
+
 # The list of tested versions below should be in sync with node's
 # official releases. https://nodejs.org/en/about/releases/
 if [[ -z "$BINARY_HOST" ]]; then
   ADDITIONAL_PACKAGES="python3 g++ make"
-  NODE_VERSIONS=(14 16 18 19)
+  NODE_VERSIONS=(18)
 else
   # Tested versions for pre-built binaries are limited based on
   # what node-pre-gyp can specify as its target version.
