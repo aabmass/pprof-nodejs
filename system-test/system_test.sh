@@ -34,7 +34,7 @@ for i in ${NODE_VERSIONS[@]}; do
   docker run  -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-linux \
       /src/system-test/test.sh
 
-  docker run  -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" \
+  docker run --sysctl net.ipv6.conf.all.disable_ipv6=1 -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" \
       -e VERIFY_TIME_LINE_NUMBERS="true" node$i-linux \
       /src/system-test/test.sh
 
@@ -43,7 +43,7 @@ for i in ${NODE_VERSIONS[@]}; do
       --build-arg ADDITIONAL_PACKAGES="$ADDITIONAL_PACKAGES" \
       --build-arg NODE_VERSION=$i -t node$i-alpine .
 
-  docker run -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-alpine \
+  docker run --sysctl net.ipv6.conf.all.disable_ipv6=1 -v $PWD/..:/src -e BINARY_HOST="$BINARY_HOST" node$i-alpine \
       /src/system-test/test.sh
 done
 
